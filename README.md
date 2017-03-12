@@ -65,6 +65,10 @@ After you ssh to the pi, install a few essential libraries:
     $ sudo apt-get install python-pip
     $ sudo pip install requests tweepy
     
+After you need to install msmtp:
+
+    $ sudo apt-get install -y msmtp
+    
 Set the timezone to make sure timestamps are correct
 
     $ sudo raspi-config

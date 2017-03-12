@@ -1,0 +1,11 @@
+account default
+host ssl0.ovh.net
+auth login
+tls on
+tls_starttls off
+tls_certcheck on
+tls_tust_file /etc/ssl/certs/ca-certificates.crt
+from mail@xxx.xx
+port 465
+user mail@xxx.xx
+password yourpassword

@@ -33,6 +33,25 @@ def tweet(msg):
 	except:
 		pass
 
+def mail(msg):
+	mails = mail_receiver.split(';')
+	try:
+		headerFrom = "From: " + mail_sender + "\n"
+		headerSubject = "Subject: " + msg + "\n"
+		headerMsg = mail_body_msg
+		for mail in mails:
+			headerTo = "To: " + mail + "\n"
+			with open("mail", "w") as fichier:
+				fichier.write(headerFrom)
+				fichier.write(headerTo)
+				fichier.write(headerSubject)
+				fichier.write(headerMsg)
+			os.system('cat mail | msmtp ' + mail)
+	except (KeyboardInterrupt, SystemExit):
+		raise
+	except:
+		pass
+
 def send_alert(message):
 	if len(message) > 1:
 		print message;
@@ -42,6 +61,9 @@ def send_alert(message):
 			pushbullet(pushbullet_api_key2, message)
 		if len(twitter_api_key) > 0:
 			tweet(message)
+        if len(mail_sender) > 0:
+            if len(mail_receiver) > 0:
+                mail(message)
 
 def send_appliance_active_message():
 	send_alert(start_message)
@@ -92,14 +114,22 @@ config.read(sys.argv[1])
 sensor_pin = config.getint('main', 'SENSOR_PIN')
 begin_seconds = config.getint('main', 'SECONDS_TO_START')
 end_seconds = config.getint('main', 'SECONDS_TO_END')
+
 pushbullet_api_key = config.get('pushbullet', 'API_KEY')
 pushbullet_api_key2 = config.get('pushbullet', 'API_KEY2')
+
 start_message = config.get('main', 'START_MESSAGE')
 end_message = config.get('main', 'END_MESSAGE')
+
 twitter_api_key = config.get('twitter', 'api_key')
 twitter_api_secret = config.get('twitter', 'api_secret')
 twitter_access_token = config.get('twitter', 'access_token')
 twitter_access_token_secret = config.get('twitter', 'access_token_secret')
+
+mail_sender = config.get('mail', 'sender')
+mail_receiver = config.get('mail', 'receiver')
+mail_body_msg = config.get('mail', 'body')
+                           
 send_alert( config.get('main', 'BOOT_MESSAGE') )
 
 GPIO.setwarnings(False)
